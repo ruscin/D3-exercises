@@ -1,0 +1,11 @@
+
+svg {
+  display: block;
+    margin: 20;
+  }
+.bar:hover{
+    fill:red;    
+}
+button{
+  margin-bottom: 15px;
+}
