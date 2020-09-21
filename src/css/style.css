@@ -1,7 +1,11 @@
 
+body{
+  background-color: #bdbdbd;
+}
 svg {
   display: block;
     margin: 20;
+    background-color: white;
   }
 .bar:hover{
     fill:red;    

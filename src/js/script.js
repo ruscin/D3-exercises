@@ -52,6 +52,7 @@ const countPositions = (data) => {
         value: calc,
         width: barWidth - barMargin,
         name: el.id,
+        fill: "#448aff",
       },
       idLabel: {
         y: h - 10,
@@ -62,9 +63,14 @@ const countPositions = (data) => {
         y: h - calc - blankSpaceBottom - 4,
         x: index * barWidth + leftSvgMargin,
         name: el.value,
+        fill: "black",
       },
     };
-    if (el.value > 97) obj.valueLabel.y += 24;
+    if (el.value > 97) {
+      obj.valueLabel.y += 24;
+      obj.valueLabel.fill = "white"
+    }
+     
     return obj;
   });
   return Positions;
@@ -80,7 +86,7 @@ const draw = (data, areLabelsOn) => {
     .attr("y", (d) => d.bar.y)
     .attr("width", (d) => d.bar.width)
     .attr("height", (d) => d.bar.value)
-    .attr("fill", "#448aff")
+    .attr("fill", (d) => d.bar.fill)
     .attr("class", "bar");
 
   if (areLabelsOn === true) {
@@ -94,7 +100,9 @@ const draw = (data, areLabelsOn) => {
       .attr("text-anchor", "middle")
       .attr("x", (d) => d.idLabel.x)
       .attr("y", (d) => d.valueLabel.y)
-      .text((d) => d.valueLabel.name);
+      .text((d) => d.valueLabel.name)
+      .attr("fill", (d) => d.valueLabel.fill)
+      
   }
 };
 
@@ -132,9 +140,7 @@ const generateNumbers = () => {
   callDraw();
 };
 
-const changeChart = () => {
-
-}
+const changeChart = () => {};
 
 const kotek = countPositions(dataset);
 draw(kotek, LabelsOn);
