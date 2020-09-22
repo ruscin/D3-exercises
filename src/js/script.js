@@ -200,7 +200,7 @@ const addBar = () => {
     });
   } else if (chartType === 1) {
     stackedDataset.push({
-      values: randomInts(5, 7, 90, 100, 100),
+      values: randomInts(5, 7, 60, 100, 100),
       id: "y" + String(stackedDataset.length + 1),
     });
   }
@@ -223,7 +223,7 @@ const generateNumbers = () => {
 
   if (chartType === 1) {
     stackedDataset.forEach((el) => {
-      const numbers = randomInts(5, 7, 90, 100, 100);
+      const numbers = randomInts(el.values.length, 7, 90, 100, 100);
       el.values.forEach((item, index, arr) => {
         arr[index] = numbers[index];
       });
