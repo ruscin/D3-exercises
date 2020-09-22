@@ -69,7 +69,7 @@ const countPositions = (data) => {
 
     if (chartType === 0) {
       const barWidth = w / dataset.length;
-      const calc = (el.value * (h - 30)) / 100;
+      const calc = (el.value * (h - 30)) / 100; //multiplier if canvas would not be const size
       const obj = {
         bar: {
           y: h - calc - blankSpaceBottom,
@@ -91,7 +91,8 @@ const countPositions = (data) => {
           fill: "black",
         },
       };
-      if (el.value > 97) {
+      //if label would be tot high place it lower
+      if (el.value > 96) {
         obj.valueLabel.y += 24;
         obj.valueLabel.fill = "white";
       }
@@ -286,8 +287,3 @@ const deleteStack = () => {
 const finalChart = countPositions(dataset);
 draw(finalChart);
 
-//TODO refactoring??
-
-//TODO fix id rendering for stackedChart
-
-//TODO add comments
