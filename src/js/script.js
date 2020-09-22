@@ -295,3 +295,7 @@ draw(kotek, LabelsOn);
 //TODO fix id rendering for stackedChart
 
 //TODO add comments
+
+//todo AreLabelsOn in diffrent place or remove
+
+//todo stackchart barchart button fix
