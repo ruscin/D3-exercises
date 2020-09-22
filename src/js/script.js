@@ -51,8 +51,8 @@ const blankSpaceBottom = 30;
 const barMargin = 10;
 
 //helpers labels
-let LabelsOn = true;
-let chartType = 1; //0 - default, bar chart, 1 - stacked chart
+
+let chartType = 0; //0 - default, bar chart, 1 - stacked chart
 
 const countPositions = (data, chartType) => {
   const Positions = data.map((el, index) => {
@@ -141,20 +141,18 @@ const draw = (data, areLabelsOn) => {
     .attr("fill", (d) => d.bar.fill)
     .attr("class", "bar");
 
-  if (areLabelsOn === true) {
-    g.append("text")
-      .attr("text-anchor", "middle")
-      .attr("x", (d) => d.idLabel.x)
-      .attr("y", (d) => d.idLabel.y)
-      .text((d) => d.idLabel.name);
+  g.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", (d) => d.idLabel.x)
+    .attr("y", (d) => d.idLabel.y)
+    .text((d) => d.idLabel.name);
 
-    g.append("text")
-      .attr("text-anchor", "middle")
-      .attr("x", (d) => d.idLabel.x)
-      .attr("y", (d) => d.valueLabel.y)
-      .text((d) => d.valueLabel.name)
-      .attr("fill", (d) => d.valueLabel.fill);
-  }
+  g.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", (d) => d.idLabel.x)
+    .attr("y", (d) => d.valueLabel.y)
+    .text((d) => d.valueLabel.name)
+    .attr("fill", (d) => d.valueLabel.fill);
 };
 
 const randomNumber = (min, max) => {
@@ -191,7 +189,7 @@ const callDraw = () => {
     drawer = countPositions(stackedDataset, "stackedChart");
   }
   svg.selectAll("*").remove();
-  draw(drawer, LabelsOn);
+  draw(drawer);
 };
 
 const addBar = () => {
@@ -220,10 +218,7 @@ const deleteBar = () => {
   callDraw();
 };
 
-const switchLabels = () => {
-  LabelsOn = !LabelsOn;
-  callDraw();
-};
+
 
 const generateNumbers = () => {
   dataset.forEach((el) => (el.value = randomNumber(1, 100)));
@@ -263,7 +258,6 @@ const addStack = () => {
     );
   }
 
-
   callDraw();
 };
 const deleteStack = () => {
@@ -283,12 +277,11 @@ const deleteStack = () => {
 
   callDraw();
 };
-const kotek = countPositions(stackedDataset, "stackedChart");
+const kotek = countPositions(dataset, "barChart");
 const piesek = countPositions(dataset, "barChart");
 
 console.log(kotek);
-draw(kotek, LabelsOn);
-
+draw(kotek);
 
 //TODO refactoring??
 
