@@ -23,9 +23,21 @@ let stackedDataset = [
   { values: [36, 11, 11, 31, 11], id: "y8" },
   { values: [27, 12, 25, 10, 26], id: "y9" },
   { values: [10, 58, 10, 11, 11], id: "y10" },
+  { values: [15, 25, 15, 20, 25], id: "y11" },
 ];
 
-let fillColors = ["#448aff", "#880015", "#ff7d27", "#22b14d", "#b434c2"];
+let fillColors = [
+  "#448aff",
+  "#880015",
+  "#ff7d27",
+  "#22b14d",
+  "#b434c2",
+  "#FFFF00",
+  "#808000",
+  "#008080",
+  "#000080",
+  "#C0C0C0",
+];
 
 //SVG size
 const w = 500;
@@ -38,16 +50,17 @@ const blankSpaceBottom = 30;
 //bars
 const barMargin = 10;
 
-//labels
+//helpers labels
 let LabelsOn = true;
+let chartType = 1; //0 - default, bar chart, 1 - stacked chart
 
 const countPositions = (data, chartType) => {
   const Positions = data.map((el, index) => {
-    const barWidth = w / dataset.length;
     let store = [];
     let counter = 0;
 
     if (chartType === "barChart") {
+      const barWidth = w / dataset.length;
       const calc = (el.value * (h - 30)) / 100;
       const obj = {
         bar: {
@@ -78,6 +91,7 @@ const countPositions = (data, chartType) => {
     }
     if (chartType === "stackedChart") {
       const valuesAmount = el.values.length;
+      const barWidth = w / stackedDataset.length;
 
       for (let i = 0; i < valuesAmount; i++) {
         const calc = (el.values[i] * (h - 30)) / 100;
@@ -104,9 +118,7 @@ const countPositions = (data, chartType) => {
             fill: "black",
           },
         };
-        console.log("wartosc", obj.bar.value);
-        console.log("y bara", obj.bar.y);
-        console.log("y labela", obj.valueLabel.y);
+
         store.push(obj);
       }
       counter = 0;
@@ -146,26 +158,65 @@ const draw = (data, areLabelsOn) => {
 };
 
 const randomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min) + min);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+const randombetween = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+const randomInts = (n, min, max, minSum, maxSum) => {
+  if (min * n > maxSum || max * n < minSum) {
+    throw "Impossible";
+  }
+
+  let ints = [];
+  while (n--) {
+    const thisMin = Math.max(min, minSum - n * max);
+
+    const thisMax = Math.min(max, maxSum - n * min);
+
+    const int = randomNumber(thisMin, thisMax);
+    minSum -= int;
+    maxSum -= int;
+    ints.push(int);
+  }
+  return ints;
 };
 
 const callDraw = () => {
-  const drawer = countPositions(dataset, "barChart");
+  let drawer;
+  if (chartType === 0) drawer = countPositions(dataset, "barChart");
+  else if (chartType === 1) {
+    drawer = countPositions(stackedDataset, "stackedChart");
+  }
   svg.selectAll("*").remove();
   draw(drawer, LabelsOn);
 };
 
 const addBar = () => {
-  dataset.push({
-    value: randomNumber(1, 100),
-    id: "y" + String(dataset.length + 1),
-  });
+  if (chartType === 0) {
+    dataset.push({
+      value: randomNumber(1, 100),
+      id: "y" + String(dataset.length + 1),
+    });
+  } else if (chartType === 1) {
+    stackedDataset.push({
+      values: randomInts(5, 7, 90, 100, 100),
+      id: "y" + String(stackedDataset.length + 1),
+    });
+  }
 
   callDraw();
 };
 
 const deleteBar = () => {
-  dataset.pop();
+  if (chartType === 0) {
+    dataset.pop();
+  } else if (chartType === 1) {
+    stackedDataset.pop();
+  }
+
   callDraw();
 };
 
@@ -176,14 +227,39 @@ const switchLabels = () => {
 
 const generateNumbers = () => {
   dataset.forEach((el) => (el.value = randomNumber(1, 100)));
+
+  if (chartType === 1) {
+    stackedDataset.forEach((el) => {
+      const numbers = randomInts(5, 7, 90, 100, 100);
+      el.values.forEach((item, index, arr) => {
+        arr[index] = numbers[index];
+      });
+    });
+  }
+
   callDraw();
 };
 
-const changeChart = () => {};
+const changeChart = () => {
+  if (chartType === 1) chartType = 0;
+  else chartType = 1;
+  callDraw();
+};
+
+const changeButtonText = (button_id) => {
+  const text = document.getElementById(button_id).firstChild;
+  text.data =
+    text.data == "pokaz stackchart" ? "pokaz barchart" : "pokaz stackchart";
+};
 
 const kotek = countPositions(stackedDataset, "stackedChart");
 const piesek = countPositions(dataset, "barChart");
 
-//draw(piesek, LabelsOn);
 console.log(kotek);
 draw(kotek, LabelsOn);
+
+//TODO add addStack/deleteStack func
+
+//TODO refactoring??
+
+//TODO fix id rendering for stackedChart
