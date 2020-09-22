@@ -37,6 +37,14 @@ let fillColors = [
   "#008080",
   "#000080",
   "#C0C0C0",
+  "#eee",
+  "#eee",
+  "#eee",
+  "#eee",
+  "#eee",
+  "#eee",
+  "#eee",
+  "#eee",
 ];
 
 //SVG size
@@ -130,7 +138,7 @@ const countPositions = (data, chartType) => {
 
 const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
-const draw = (data, areLabelsOn) => {
+const draw = (data) => {
   const g = svg.selectAll("g").data(data).enter().append("g");
 
   g.append("rect")
@@ -286,5 +294,3 @@ draw(kotek);
 //TODO fix id rendering for stackedChart
 
 //TODO add comments
-
-
