@@ -218,8 +218,6 @@ const deleteBar = () => {
   callDraw();
 };
 
-
-
 const generateNumbers = () => {
   dataset.forEach((el) => (el.value = randomNumber(1, 100)));
 
@@ -289,6 +287,4 @@ draw(kotek);
 
 //TODO add comments
 
-//todo AreLabelsOn in diffrent place or remove
 
-//todo stackchart barchart button fix
