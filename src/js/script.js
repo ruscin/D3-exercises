@@ -252,14 +252,46 @@ const changeButtonText = (button_id) => {
     text.data == "pokaz stackchart" ? "pokaz barchart" : "pokaz stackchart";
 };
 
+const addStack = () => {
+  if (chartType === 1) {
+    stackedDataset[stackedDataset.length - 1].values = randomInts(
+      stackedDataset[stackedDataset.length - 1].values.length + 1,
+      5,
+      100,
+      100,
+      100
+    );
+  }
+
+
+  callDraw();
+};
+const deleteStack = () => {
+  if (
+    chartType === 1 &&
+    stackedDataset[stackedDataset.length - 1].values.length > 1
+  ) {
+    stackedDataset[stackedDataset.length - 1].values.pop();
+    stackedDataset[stackedDataset.length - 1].values = randomInts(
+      stackedDataset[stackedDataset.length - 1].values.length,
+      5,
+      100,
+      100,
+      100
+    );
+  }
+
+  callDraw();
+};
 const kotek = countPositions(stackedDataset, "stackedChart");
 const piesek = countPositions(dataset, "barChart");
 
 console.log(kotek);
 draw(kotek, LabelsOn);
 
-//TODO add addStack/deleteStack func
 
 //TODO refactoring??
 
 //TODO fix id rendering for stackedChart
+
+//TODO add comments
