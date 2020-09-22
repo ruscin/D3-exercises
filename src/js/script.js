@@ -62,12 +62,12 @@ const barMargin = 10;
 
 let chartType = 0; //0 - default, bar chart, 1 - stacked chart
 
-const countPositions = (data, chartType) => {
+const countPositions = (data) => {
   const Positions = data.map((el, index) => {
     let store = [];
     let counter = 0;
 
-    if (chartType === "barChart") {
+    if (chartType === 0) {
       const barWidth = w / dataset.length;
       const calc = (el.value * (h - 30)) / 100;
       const obj = {
@@ -97,7 +97,7 @@ const countPositions = (data, chartType) => {
       }
       store.push(obj);
     }
-    if (chartType === "stackedChart") {
+    if (chartType === 1) {
       const valuesAmount = el.values.length;
       const barWidth = w / stackedDataset.length;
 
@@ -192,9 +192,9 @@ const randomInts = (n, min, max, minSum, maxSum) => {
 
 const callDraw = () => {
   let drawer;
-  if (chartType === 0) drawer = countPositions(dataset, "barChart");
+  if (chartType === 0) drawer = countPositions(dataset);
   else if (chartType === 1) {
-    drawer = countPositions(stackedDataset, "stackedChart");
+    drawer = countPositions(stackedDataset);
   }
   svg.selectAll("*").remove();
   draw(drawer);
@@ -283,11 +283,8 @@ const deleteStack = () => {
 
   callDraw();
 };
-const kotek = countPositions(dataset, "barChart");
-const piesek = countPositions(dataset, "barChart");
-
-console.log(kotek);
-draw(kotek);
+const finalChart = countPositions(dataset);
+draw(finalChart);
 
 //TODO refactoring??
 
