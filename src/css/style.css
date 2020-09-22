@@ -8,7 +8,7 @@ svg {
     background-color: white;
   }
 .bar:hover{
-    fill:red;    
+    fill:pink;    
 }
 button{
   margin-bottom: 15px;
