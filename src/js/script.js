@@ -63,41 +63,45 @@ const barMargin = 10;
 let chartType = 0; //0 - default, bar chart, 1 - stacked chart
 
 const countPositions = (data) => {
-  const Positions = data.map((el, index) => {
-    let store = [];
-    let counter = 0;
-
+  const bars = [];
+  const idLabels = [];
+  const valueLabels = [];
+  const Positions = data.reduce((acc, el, index) => {
     if (chartType === 0) {
       const barWidth = w / dataset.length;
       const calc = (el.value * (h - 30)) / 100; //multiplier if canvas would not be const size
-      const obj = {
-        bar: {
-          y: h - calc - blankSpaceBottom,
-          x: index * barWidth + leftSvgMargin,
-          value: calc,
-          width: barWidth - barMargin,
-          name: el.id,
-          fill: fillColors[0],
-        },
-        idLabel: {
-          y: h - 10,
-          x: index * barWidth + barWidth / 2,
-          name: el.id,
-        },
-        valueLabel: {
-          y: h - calc - blankSpaceBottom - 4,
-          x: index * barWidth + leftSvgMargin,
-          name: el.value,
-          fill: "black",
-        },
-      };
-      //if label would be tot high place it lower
-      if (el.value > 96) {
-        obj.valueLabel.y += 24;
-        obj.valueLabel.fill = "white";
-      }
-      store.push(obj);
+      bars.push({
+        y: h - calc - blankSpaceBottom,
+        x: index * barWidth + leftSvgMargin,
+        value: calc,
+        width: barWidth - barMargin,
+        name: el.id,
+        fill: fillColors[0],
+      });
+      idLabels.push({
+        y: h - 10,
+        x: index * barWidth + barWidth / 2,
+        name: el.id,
+      });
+      valueLabels.push({
+        y: h - calc - blankSpaceBottom - 4,
+        x: index * barWidth + leftSvgMargin,
+        name: el.value,
+        fill: "black",
+      });
+      //console.log({ bar, idLabel, valueLabel });
+      return { bars, idLabels, valueLabels };
     }
+    if (chartType === 1){
+     console.log("TODO")
+    }
+  });
+  console.log("%c positions", "color: blue", Positions);
+  console.log("%c only bars", "color:green", Positions.bars);
+
+  /*
+  const Positions = data.map((el, index) => {
+
     if (chartType === 1) {
       const valuesAmount = el.values.length;
       const barWidth = w / stackedDataset.length;
@@ -134,23 +138,24 @@ const countPositions = (data) => {
     }
     return store;
   });
-  return Positions.flat();
+  return Positions.flat();*/
+  return Positions
 };
 
 const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
 const draw = (data) => {
-  const g = svg.selectAll("g").data(data).enter().append("g");
+  const g = svg.selectAll("g").data(data.bars).enter().append("g");
 
   g.append("rect")
-    .attr("x", (d) => d.bar.x)
-    .attr("y", (d) => d.bar.y)
-    .attr("width", (d) => d.bar.width)
-    .attr("height", (d) => d.bar.value)
-    .attr("fill", (d) => d.bar.fill)
+    .attr("x", (d) => d.x)
+    .attr("y", (d) => d.y)
+    .attr("width", (d) => d.width)
+    .attr("height", (d) => d.value)
+    .attr("fill", (d) => d.fill)
     .attr("class", "bar");
 
-  g.append("text")
+  /*g.append("text")
     .attr("text-anchor", "middle")
     .attr("x", (d) => d.idLabel.x)
     .attr("y", (d) => d.idLabel.y)
@@ -161,7 +166,7 @@ const draw = (data) => {
     .attr("x", (d) => d.idLabel.x)
     .attr("y", (d) => d.valueLabel.y)
     .text((d) => d.valueLabel.name)
-    .attr("fill", (d) => d.valueLabel.fill);
+    .attr("fill", (d) => d.valueLabel.fill);*/
 };
 
 const randomNumber = (min, max) => {
@@ -284,6 +289,9 @@ const deleteStack = () => {
 
   callDraw();
 };
+
 const finalChart = countPositions(dataset);
+console.log("array after countPositions", finalChart)
+
 draw(finalChart);
 
