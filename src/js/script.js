@@ -63,39 +63,46 @@ const barMargin = 10;
 let chartType = 0; //0 - default, bar chart, 1 - stacked chart
 
 const countPositions = (data) => {
-  const bars = [];
-  const idLabels = [];
-  const valueLabels = [];
-  const Positions = data.reduce((acc, el, index) => {
-    if (chartType === 0) {
-      const barWidth = w / dataset.length;
-      const calc = (el.value * (h - 30)) / 100; //multiplier if canvas would not be const size
-      bars.push({
-        y: h - calc - blankSpaceBottom,
-        x: index * barWidth + leftSvgMargin,
-        value: calc,
-        width: barWidth - barMargin,
-        name: el.id,
-        fill: fillColors[0],
-      });
-      idLabels.push({
-        y: h - 10,
-        x: index * barWidth + barWidth / 2,
-        name: el.id,
-      });
-      valueLabels.push({
-        y: h - calc - blankSpaceBottom - 4,
-        x: index * barWidth + leftSvgMargin,
-        name: el.value,
-        fill: "black",
-      });
-      //console.log({ bar, idLabel, valueLabel });
-      return { bars, idLabels, valueLabels };
-    }
-    if (chartType === 1){
-     console.log("TODO")
-    }
-  });
+  // const bars = [];
+  // const idLabels = [];
+  // const valueLabels = [];
+  const Positions = data.reduce(
+    (acc, el, index) => {
+      if (chartType === 0) {
+        const barWidth = w / dataset.length;
+        const calc = (el.value * (h - 30)) / 100; //multiplier if canvas would not be const size
+        acc.bars.push({
+          y: h - calc - blankSpaceBottom,
+          x: index * barWidth + leftSvgMargin,
+          value: calc,
+          width: barWidth - barMargin,
+          name: el.id,
+          fill: fillColors[0],
+          id: index,
+        });
+        acc.idLabels.push({
+          y: h - 10,
+          x: index * barWidth + barWidth / 2,
+          name: el.id,
+          id: index,
+        });
+        acc.valueLabels.push({
+          y: h - calc - blankSpaceBottom - 4,
+          x: index * barWidth + leftSvgMargin + 15,
+          name: el.value,
+          fill: "black",
+          id: index,
+        });
+
+        // return { bars, idLabels, valueLabels };
+      }
+      if (chartType === 1) {
+        console.log("TODO");
+      }
+      return acc;
+    },
+    { bars: [], idLabels: [], valueLabels: [] }
+  );
   console.log("%c positions", "color: blue", Positions);
   console.log("%c only bars", "color:green", Positions.bars);
 
@@ -139,13 +146,56 @@ const countPositions = (data) => {
     return store;
   });
   return Positions.flat();*/
-  return Positions
+  return Positions;
 };
 
 const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
 const draw = (data) => {
-  const g = svg.selectAll("g").data(data.bars).enter().append("g");
+  const bars = svg.selectAll(".bar").data(data.bars, (d) => d.id);
+  bars
+    .enter()
+    .append("rect")
+    .attr("x", (d) => d.x)
+    .attr("width", (d) => d.width)
+    .attr("height", (d) => 0)
+    .attr("fill", (d) => d.fill)
+    .attr("class", "bar")
+    .attr("y", h - 30);
+
+  bars
+    .transition()
+    .duration(1000)
+    .attr("y", (d) => d.y)
+    .attr("height", (d) => d.value);
+
+  bars.exit().remove();
+
+  const idLabels = svg.selectAll(".idLables").data(data.idLabels, (d) => d.id);
+  idLabels
+    .enter()
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", (d) => d.x)
+    .attr("y", (d) => d.y)
+    .text((d) => d.name);
+  idLabels.exit().remove();
+
+  const valueLabels = svg
+    .selectAll(".valueLables")
+    .data(data.valueLabels, (d) => d.id);
+  valueLabels
+    .enter()
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", (d) => d.x)
+    .attr("y", (d) => d.y)
+    .text((d) => d.name)
+    .attr("fill", (d) => d.fill);
+
+  valueLabels.exit().remove();
+
+  /*const g = svg.selectAll("g").data(data.bars).enter().append("g");
 
   g.append("rect")
     .attr("x", (d) => d.x)
@@ -153,7 +203,7 @@ const draw = (data) => {
     .attr("width", (d) => d.width)
     .attr("height", (d) => d.value)
     .attr("fill", (d) => d.fill)
-    .attr("class", "bar");
+    .attr("class", "bar");*/
 
   /*g.append("text")
     .attr("text-anchor", "middle")
@@ -291,7 +341,6 @@ const deleteStack = () => {
 };
 
 const finalChart = countPositions(dataset);
-console.log("array after countPositions", finalChart)
+console.log("array after countPositions", finalChart);
 
 draw(finalChart);
-
