@@ -60,7 +60,7 @@ const barMargin = 10;
 
 //helpers labels
 
-let chartType = 1; //0 - default, bar chart, 1 - stacked chart
+let chartType = 0; //0 - default, bar chart, 1 - stacked chart
 
 const countPositions = (data) => {
   const Positions = data.reduce(
@@ -130,89 +130,12 @@ const countPositions = (data) => {
           name: el.id,
           id: Math.random(),
         });
-
-        /*
-        console.log("el", el);
-        const rangeWidth = w / stackedDataset.length;
-        const barMargin = 5;
-        let counter = 0;
-        el.values.forEach((itemValue, forIndex) => {
-          const calc = (itemValue * (h - 30)) / 100;
-          counter += calc;
-          acc.bars.push({
-            y: h - calc - blankSpaceBottom,
-            x: index * rangeWidth + barMargin,
-            value: calc,
-            width: rangeWidth - barMargin * 2,
-            name: el.id,
-            fill: fillColors[forIndex],
-            id: Math.random(),
-          });
-
-          acc.valueLabels.push({
-            y: h - (counter - calc / 2) - blankSpaceBottom + 4,
-            x: index * rangeWidth + rangeWidth / 2,
-            name: el.value,
-            fill: "black",
-            id: Math.random(),
-          });
-        });
-
-        acc.idLabels.push({
-          y: h - 10,
-          x: index * rangeWidth + rangeWidth / 2,
-          name: el.id,
-          id: index,
-        });
-        */
       }
       return acc;
     },
     { bars: [], idLabels: [], valueLabels: [] }
   );
-  // console.log("%c positions", "color: blue", Positions);
-  console.log("%c only bars", "color:green", Positions.bars);
 
-  /*
-  const Positions = data.map((el, index) => {
-
-    if (chartType === 1) {
-      const valuesAmount = el.values.length;
-      const rangeWidth = w / stackedDataset.length;
-
-      for (let i = 0; i < valuesAmount; i++) {
-        const calc = (el.values[i] * (h - 30)) / 100;
-        counter += calc;
-
-        const obj = {
-          bar: {
-            y: h - counter - blankSpaceBottom,
-            x: index * rangeWidth + leftSvgMargin,
-            value: calc,
-            width: rangeWidth - barMargin,
-            name: el.id,
-            fill: fillColors[i],
-          },
-          idLabel: {
-            y: h - 10,
-            x: index * rangeWidth + rangeWidth / 2,
-            name: el.id,
-          },
-          valueLabel: {
-            y: h - (counter - calc / 2) - blankSpaceBottom + 4,
-            x: index * rangeWidth + leftSvgMargin,
-            name: el.values[i],
-            fill: "black",
-          },
-        };
-
-        store.push(obj);
-      }
-      counter = 0;
-    }
-    return store;
-  });
-  return Positions.flat();*/
   return Positions;
 };
 
@@ -261,29 +184,6 @@ const draw = (data) => {
     .attr("fill", (d) => d.fill);
 
   valueLabels.exit().remove();
-
-  /*const g = svg.selectAll("g").data(data.bars).enter().append("g");
-
-  g.append("rect")
-    .attr("x", (d) => d.x)
-    .attr("y", (d) => d.y)
-    .attr("width", (d) => d.width)
-    .attr("height", (d) => d.value)
-    .attr("fill", (d) => d.fill)
-    .attr("class", "bar");*/
-
-  /*g.append("text")
-    .attr("text-anchor", "middle")
-    .attr("x", (d) => d.idLabel.x)
-    .attr("y", (d) => d.idLabel.y)
-    .text((d) => d.idLabel.name);
-
-  g.append("text")
-    .attr("text-anchor", "middle")
-    .attr("x", (d) => d.idLabel.x)
-    .attr("y", (d) => d.valueLabel.y)
-    .text((d) => d.valueLabel.name)
-    .attr("fill", (d) => d.valueLabel.fill);*/
 };
 
 const randomNumber = (min, max) => {
@@ -407,7 +307,6 @@ const deleteStack = () => {
   callDraw();
 };
 
-const finalChart = countPositions(stackedDataset);
-console.log("array after countPositions", finalChart);
+const finalChart = countPositions(dataset);
 
 draw(finalChart);
