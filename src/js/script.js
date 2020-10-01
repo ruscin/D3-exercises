@@ -47,7 +47,6 @@ let fillColors = [
   "#22b14d",
   "#ff7d27",
   "#880015",
-
 ];
 
 //SVG size
@@ -195,7 +194,7 @@ const randombetween = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-const randomInts = (n, min, max, minSum, maxSum) => {
+const randomInts = (n, min, max, minSum, maxSum) => { //TODO?
   if (min * n > maxSum || max * n < minSum) {
     throw "Impossible";
   }
@@ -220,7 +219,7 @@ const callDraw = () => {
   else if (chartType === 1) {
     drawer = countPositions(stackedDataset);
   }
-  svg.selectAll("*").remove();
+  svg.selectAll("*").remove(); //TODO?
   draw(drawer);
 };
 
