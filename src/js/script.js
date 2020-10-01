@@ -102,32 +102,33 @@ const countPositions = (data) => {
         const rangeWidth = w / stackedDataset.length;
         let counter = 0;
 
-        for (let i = 0; i < valuesAmount; i++) {
-          const calc = (el.values[i] * (h - 30)) / 100;
+        el.values.forEach((item, forIndex) => {
+          const calc = (item * (h - 30)) / 100;
           counter += calc;
 
           acc.bars.push({
             y: h - counter - blankSpaceBottom,
-            x: index * rangeWidth + barMargin,
+            x: index * rangeWidth + barMargin - 5,
             value: calc,
-            width: rangeWidth - barMargin * 2 ,
+            width: rangeWidth - barMargin,
             name: el.id,
-            fill: fillColors[i],
+            fill: fillColors[forIndex],
             id: Math.random(),
           });
           acc.valueLabels.push({
             y: h - (counter - calc / 2) - blankSpaceBottom + 4,
             x: index * rangeWidth + rangeWidth / 2,
-            name: el.values[i],
+            name: item,
             fill: "black",
             id: Math.random(),
           });
-        }
+        });
+
         acc.idLabels.push({
           y: h - 10,
           x: index * rangeWidth + rangeWidth / 2,
           name: el.id,
-          id: Math.random()
+          id: Math.random(),
         });
 
         /*
