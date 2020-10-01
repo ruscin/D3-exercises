@@ -63,37 +63,43 @@ const barMargin = 10;
 let chartType = 0; //0 - default, bar chart, 1 - stacked chart
 
 const countPositions = (data) => {
-
   const Positions = data.reduce(
     (acc, el, index) => {
       if (chartType === 0) {
-        const barWidth = w / dataset.length;
+        const rangeWidth = w / dataset.length;
+        const barMargin = 5;
         const calc = (el.value * (h - 30)) / 100; //multiplier if canvas would not be const size
         acc.bars.push({
           y: h - calc - blankSpaceBottom,
-          x: index * barWidth + leftSvgMargin,
+          x: index * rangeWidth + barMargin,
           value: calc,
-          width: barWidth - barMargin,
+          width: rangeWidth - barMargin * 2,
           name: el.id,
           fill: fillColors[0],
           id: index,
         });
         acc.idLabels.push({
           y: h - 10,
-          x: index * barWidth + barWidth / 2,
+          x: index * rangeWidth + rangeWidth / 2 ,
           name: el.id,
           id: index,
         });
         acc.valueLabels.push({
           y: h - calc - blankSpaceBottom - 4,
-          x: index * barWidth + leftSvgMargin + 15,
+          x: index * rangeWidth + rangeWidth / 2 ,
           name: el.value,
           fill: "black",
           id: index,
         });
-
+        if (el.value > 96) {
+          acc.valueLabels[index].y += 24;
+          acc.valueLabels[index].fill = "white";
+        }
       }
       if (chartType === 1) {
+        console.log(el);
+        const valuesAmount = el.values.length;
+        const rangeWidth = w / stackedDataset.length;
         console.log("TODO");
       }
       return acc;
@@ -108,7 +114,7 @@ const countPositions = (data) => {
 
     if (chartType === 1) {
       const valuesAmount = el.values.length;
-      const barWidth = w / stackedDataset.length;
+      const rangeWidth = w / stackedDataset.length;
 
       for (let i = 0; i < valuesAmount; i++) {
         const calc = (el.values[i] * (h - 30)) / 100;
@@ -117,20 +123,20 @@ const countPositions = (data) => {
         const obj = {
           bar: {
             y: h - counter - blankSpaceBottom,
-            x: index * barWidth + leftSvgMargin,
+            x: index * rangeWidth + leftSvgMargin,
             value: calc,
-            width: barWidth - barMargin,
+            width: rangeWidth - barMargin,
             name: el.id,
             fill: fillColors[i],
           },
           idLabel: {
             y: h - 10,
-            x: index * barWidth + barWidth / 2,
+            x: index * rangeWidth + rangeWidth / 2,
             name: el.id,
           },
           valueLabel: {
             y: h - (counter - calc / 2) - blankSpaceBottom + 4,
-            x: index * barWidth + leftSvgMargin,
+            x: index * rangeWidth + leftSvgMargin,
             name: el.values[i],
             fill: "black",
           },
