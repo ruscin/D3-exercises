@@ -100,8 +100,6 @@ const countPositions = (data) => {
         }
       }
       if (chartType === 1) {
-        const valuesAmount = el.values.length;
-
         const rangeWidth = w / stackedDataset.length;
         let counter = 0;
 
