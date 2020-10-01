@@ -63,9 +63,7 @@ const barMargin = 10;
 let chartType = 0; //0 - default, bar chart, 1 - stacked chart
 
 const countPositions = (data) => {
-  // const bars = [];
-  // const idLabels = [];
-  // const valueLabels = [];
+
   const Positions = data.reduce(
     (acc, el, index) => {
       if (chartType === 0) {
@@ -94,7 +92,6 @@ const countPositions = (data) => {
           id: index,
         });
 
-        // return { bars, idLabels, valueLabels };
       }
       if (chartType === 1) {
         console.log("TODO");
