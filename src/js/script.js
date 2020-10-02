@@ -234,7 +234,13 @@ const addBar = () => {
     });
   } else if (chartType === 1) {
     stackedDataset.push({
-      values: randomInts(5, 7, 60, 100, 100),
+      values: randomInts(
+        stackedDataset[stackedDataset.length - 1].values.length,
+        7,
+        60,
+        100,
+        100
+      ),
       id: "y" + String(stackedDataset.length + 1),
     });
   }
