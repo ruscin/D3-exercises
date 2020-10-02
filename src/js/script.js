@@ -105,7 +105,6 @@ const countPositions = (data) => {
         el.values.forEach((item, forIndex) => {
           const calc = (item * (h - 30)) / 100;
           counter += calc;
-
           acc.bars.push({
             y: h - counter - blankSpaceBottom,
             x: index * rangeWidth + barMargin - 5,
@@ -148,7 +147,7 @@ const draw = (data) => {
     .append("rect")
     .attr("x", (d) => d.x)
     .attr("width", (d) => d.width)
-    .attr("height", (d) => 0)
+    .attr("height", 0)
     .attr("fill", (d) => d.fill)
     .attr("class", "bar")
     .attr("y", h - 30);
@@ -179,7 +178,7 @@ const draw = (data) => {
     .append("text")
     .attr("text-anchor", "middle")
     .attr("x", (d) => d.x)
-    .attr("y", (d) => h - 30)
+    .attr("y", h - 30)
     .text((d) => d.name)
     .attr("fill", (d) => d.fill)
     .transition()
@@ -203,18 +202,18 @@ const randomInts = (n, min, max, minSum, maxSum) => {
     throw "Impossible";
   }
 
-  let ints = [];
-  while (n--) {
-    const thisMin = Math.max(min, minSum - n * max);
+  return [...Array(n)].map((el, i) => {
+    //console.log(el)
+    const thisMin = Math.max(min, minSum - (n - i - 1) * max);
 
-    const thisMax = Math.min(max, maxSum - n * min);
+    const thisMax = Math.min(max, maxSum - (n - i - 1) * min);
 
     const int = randomNumber(thisMin, thisMax);
     minSum -= int;
     maxSum -= int;
-    ints.push(int);
-  }
-  return ints;
+
+    return int;
+  });
 };
 
 const callDraw = () => {
