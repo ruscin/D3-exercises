@@ -308,14 +308,18 @@ const deleteStack = () => {
     chartType === 1 &&
     stackedDataset[stackedDataset.length - 1].values.length > 1
   ) {
-    stackedDataset[stackedDataset.length - 1].values.pop();
-    stackedDataset[stackedDataset.length - 1].values = randomInts(
-      stackedDataset[stackedDataset.length - 1].values.length,
-      5,
-      100,
-      100,
-      100
-    );
+    stackedDataset.forEach((el) => {
+      el.values.pop();
+    });
+    stackedDataset.forEach((el) => {
+      el.values = randomInts(
+        stackedDataset[stackedDataset.length - 1].values.length,
+        5,
+        100,
+        100,
+        100
+      );
+    });
   }
 
   callDraw();
