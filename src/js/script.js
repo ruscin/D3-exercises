@@ -155,7 +155,7 @@ const draw = (data) => {
 
   bars
     .transition()
-    .duration(1000)
+    .duration(750)
     .attr("y", (d) => d.y)
     .attr("height", (d) => d.value);
 
@@ -179,9 +179,12 @@ const draw = (data) => {
     .append("text")
     .attr("text-anchor", "middle")
     .attr("x", (d) => d.x)
-    .attr("y", (d) => d.y)
+    .attr("y", (d) => h - 30)
     .text((d) => d.name)
-    .attr("fill", (d) => d.fill);
+    .attr("fill", (d) => d.fill)
+    .transition()
+    .duration(750)
+    .attr("y", (d) => d.y);
 
   valueLabels.exit().remove();
 };
@@ -194,7 +197,8 @@ const randombetween = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-const randomInts = (n, min, max, minSum, maxSum) => { //TODO?
+const randomInts = (n, min, max, minSum, maxSum) => {
+  //TODO?
   if (min * n > maxSum || max * n < minSum) {
     throw "Impossible";
   }
