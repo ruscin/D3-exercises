@@ -197,13 +197,11 @@ const randombetween = (min, max) => {
 };
 
 const randomInts = (n, min, max, minSum, maxSum) => {
-  //TODO?
   if (min * n > maxSum || max * n < minSum) {
     throw "Impossible";
   }
 
   return [...Array(n)].map((el, i) => {
-    //console.log(el)
     const thisMin = Math.max(min, minSum - (n - i - 1) * max);
 
     const thisMax = Math.min(max, maxSum - (n - i - 1) * min);
@@ -222,7 +220,7 @@ const callDraw = () => {
   else if (chartType === 1) {
     drawer = countPositions(stackedDataset);
   }
-  svg.selectAll("*").remove(); //TODO?
+  svg.selectAll("*").remove();
   draw(drawer);
 };
 
@@ -286,15 +284,6 @@ const changeButtonText = (button_id) => {
 };
 
 const addStack = () => {
-  // if (chartType === 1) {
-  //   stackedDataset[stackedDataset.length - 1].values = randomInts(
-  //     stackedDataset[stackedDataset.length - 1].values.length + 1,
-  //     5,
-  //     100,
-  //     100,
-  //     100
-  //   );
-  // }
   if (chartType === 1) {
     stackedDataset.forEach((el) => {
       el.values = randomInts(
