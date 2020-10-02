@@ -105,7 +105,6 @@ const countPositions = (data) => {
         el.values.forEach((item, forIndex) => {
           const calc = (item * (h - 30)) / 100;
           counter += calc;
-
           acc.bars.push({
             y: h - counter - blankSpaceBottom,
             x: index * rangeWidth + barMargin - 5,
@@ -148,7 +147,7 @@ const draw = (data) => {
     .append("rect")
     .attr("x", (d) => d.x)
     .attr("width", (d) => d.width)
-    .attr("height", (d) => 0)
+    .attr("height", 0)
     .attr("fill", (d) => d.fill)
     .attr("class", "bar")
     .attr("y", h - 30);
@@ -179,7 +178,7 @@ const draw = (data) => {
     .append("text")
     .attr("text-anchor", "middle")
     .attr("x", (d) => d.x)
-    .attr("y", (d) => h - 30)
+    .attr("y", h - 30)
     .text((d) => d.name)
     .attr("fill", (d) => d.fill)
     .transition()
@@ -198,23 +197,21 @@ const randombetween = (min, max) => {
 };
 
 const randomInts = (n, min, max, minSum, maxSum) => {
-  //TODO?
   if (min * n > maxSum || max * n < minSum) {
     throw "Impossible";
   }
 
-  let ints = [];
-  while (n--) {
-    const thisMin = Math.max(min, minSum - n * max);
+  return [...Array(n)].map((el, i) => {
+    const thisMin = Math.max(min, minSum - (n - i - 1) * max);
 
-    const thisMax = Math.min(max, maxSum - n * min);
+    const thisMax = Math.min(max, maxSum - (n - i - 1) * min);
 
     const int = randomNumber(thisMin, thisMax);
     minSum -= int;
     maxSum -= int;
-    ints.push(int);
-  }
-  return ints;
+
+    return int;
+  });
 };
 
 const callDraw = () => {
@@ -223,7 +220,7 @@ const callDraw = () => {
   else if (chartType === 1) {
     drawer = countPositions(stackedDataset);
   }
-  svg.selectAll("*").remove(); //TODO?
+  svg.selectAll("*").remove();
   draw(drawer);
 };
 
@@ -235,7 +232,13 @@ const addBar = () => {
     });
   } else if (chartType === 1) {
     stackedDataset.push({
-      values: randomInts(5, 7, 60, 100, 100),
+      values: randomInts(
+        stackedDataset[stackedDataset.length - 1].values.length,
+        7,
+        60,
+        100,
+        100
+      ),
       id: "y" + String(stackedDataset.length + 1),
     });
   }
@@ -282,13 +285,15 @@ const changeButtonText = (button_id) => {
 
 const addStack = () => {
   if (chartType === 1) {
-    stackedDataset[stackedDataset.length - 1].values = randomInts(
-      stackedDataset[stackedDataset.length - 1].values.length + 1,
-      5,
-      100,
-      100,
-      100
-    );
+    stackedDataset.forEach((el) => {
+      el.values = randomInts(
+        stackedDataset[stackedDataset.length - 1].values.length + 1,
+        5,
+        100,
+        100,
+        100
+      );
+    });
   }
 
   callDraw();
@@ -298,14 +303,18 @@ const deleteStack = () => {
     chartType === 1 &&
     stackedDataset[stackedDataset.length - 1].values.length > 1
   ) {
-    stackedDataset[stackedDataset.length - 1].values.pop();
-    stackedDataset[stackedDataset.length - 1].values = randomInts(
-      stackedDataset[stackedDataset.length - 1].values.length,
-      5,
-      100,
-      100,
-      100
-    );
+    stackedDataset.forEach((el) => {
+      el.values.pop();
+    });
+    stackedDataset.forEach((el) => {
+      el.values = randomInts(
+        stackedDataset[stackedDataset.length - 1].values.length,
+        5,
+        100,
+        100,
+        100
+      );
+    });
   }
 
   callDraw();
