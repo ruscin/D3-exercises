@@ -26,6 +26,18 @@ let stackedDataset = [
   { values: [15, 25, 15, 20, 25], id: "y11" },
 ];
 
+let ids = [32, 25, 45];
+
+let cars = [
+  { id: 10, name: "volvo", value: 55 },
+  { id: 32, name: "auto1", value: 80 },
+  { id: 10, name: "bmw", value: 55 },
+  { id: 25, name: "auto2", value: 70 },
+  { id: 11, name: "merc", value: 55 },
+  { id: 90, name: "seat", value: 55 },
+  { id: 45, name: "auto3", value: 60 },
+];
+
 let fillColors = [
   "#448aff",
   "#880015",
@@ -159,6 +171,27 @@ const draw = (data) => {
     .attr("height", (d) => d.value);
 
   bars.exit().remove();
+
+  const circles = svg.selectAll(".circle").data(data.bars, (d) => d.id);
+  circles
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => d.x + 17)
+    .attr("stroke", "red")
+    .attr("stroke-width", "3")
+    .attr("r", "10")
+    .attr("height", 0)
+    .attr("fill", "transparent")
+    .attr("class", "bar")
+    .attr("cy", h - 30);
+
+  circles
+    .transition()
+    .duration(750)
+    .attr("cy", (d) => d.y)
+    .attr("height", (d) => d.value);
+
+  circles.exit().remove();
 
   const idLabels = svg.selectAll(".idLables").data(data.idLabels, (d) => d.id);
   idLabels
@@ -323,3 +356,7 @@ const deleteStack = () => {
 const finalChart = countPositions(dataset);
 
 draw(finalChart);
+const filteredCars = cars.filter((car) => {
+  return ids.find((id) => car.id === id);
+});
+console.log(filteredCars);
